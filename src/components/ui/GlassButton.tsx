@@ -1,54 +1,65 @@
+"use client"
+
+
 import React from "react";
-import { useRouter } from "next/navigation";
 
 interface GlassButtonProps {
   text: string;
-  backgroundColor?: string;
-  navigateTo?: string;
-  onClick?: () => void;
+  active?: boolean; // Controlled from parent
   className?: string;
+  onClick?: () => void;
 }
+
+// Consolidated styles for clarity
+const STYLES = {
+  base: `
+    flex flex-col justify-center items-center overflow-hidden
+    w-[80px] h-[80px]
+    rounded-[32px]
+    backdrop-blur-lg
+    bg-gradient-to-br from-white/30 to-white/10
+    border border-white/40
+    text-[15px] tracking-wide
+    cursor-pointer
+    transition-all duration-200 ease-out
+    font-roboto font-normal text-black
+  `,
+  normal: {
+    backgroundColor: "rgba(213, 240, 254, 0.6)",
+    boxShadow: `
+      -1.5px -1px 1px rgba(255, 255, 255, 0.8),
+       1px  1px 1px rgba(255, 255, 255, 0.8)
+    `,
+    transform: "scale(1)",
+  },
+  active: {
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    boxShadow: `
+      -2px -1px 1px rgba(255, 255, 255, 0.9), 
+       2px 1px 1px rgba(255, 255, 255, 0.9)
+    `,
+    transform: "scale(1.02)",
+  },
+};
+
+// Helper to get state styles
+const getStateStyles = (active: boolean) =>
+  active ? STYLES.active : STYLES.normal;
 
 export const GlassButton: React.FC<GlassButtonProps> = ({
   text,
-  backgroundColor,
-  navigateTo,
-  onClick,
+  active = false,
   className = "",
+  onClick,
 }) => {
-  const router = useRouter();
-
-  const handleClick = () => {
-    if (onClick) onClick();
-    if (navigateTo) router.push(navigateTo);
-  };
-
   return (
     <button
       type="button"
-      onClick={handleClick}
-      className={`
-        flex flex-col justify-center items-center overflow-hidden
-        w-[80px] h-[80px]
-        bg-[#D5F0FE]
-        rounded-[32px]
-        backdrop-blur-[100px]
-        text-[15px] tracking-wide
-        cursor-pointer
-        ${className}
-      `}
-      style={{
-        fontFamily: "'Roboto', sans-serif",
-        fontWeight: 400, // Regular weight
-        color: "#000000", // Pure black text
-        fontVariationSettings: "'wdth' 100",
-        boxShadow: `
-          -1.5px -1px 1px rgba(255, 255, 255, 0.9),
-           1.5px  1px 1px rgba(255, 255, 255, 0.9)
-        `,
-      }}
+      onClick={onClick}
+      className={`${STYLES.base} ${className}`}
+      style={getStateStyles(active)}
     >
-      <span className="leading-6">{text}</span>
+      {text}
     </button>
   );
 };

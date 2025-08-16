@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import React from "react";
 import MobileAccessForm from "../layout/AccessForm/Mobile/AccessForm";
 import TabletAccessForm from "../layout/AccessForm/Tablet/AccessForm";
