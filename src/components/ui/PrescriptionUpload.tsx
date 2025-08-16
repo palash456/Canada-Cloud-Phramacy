@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from "react";
 import FullScreenCamera from "./FullScreenCamera";
+import Image from "next/image";
 
 const styles = {
   wrapper: "min-h-screen w-full flex flex-col items-center justify-center bg-[#f0f5ff]",
@@ -70,21 +71,29 @@ export const PrescriptionUpload = ({ onUpload }: { onUpload: (file: File) => voi
           onChange={handleFileChange}
         />
         {previewUrl && (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-            <img src={previewUrl} alt="Preview" className={styles.preview} />
-            <div className={styles.fileName}>{fileName}</div>
-            <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-              <button
-                className={styles.button}
-                style={{ background: '#f44336', color: '#fff' }}
-                onClick={() => {
-                  setPreviewUrl(null);
-                  setFileName("");
-                }}
-              >
-                Discard / Retry
-              </button>
-            </div>
+          <div className="mt-4">
+            <Image
+              src={previewUrl}
+              alt="Prescription Preview"
+              width={300}
+              height={300}
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+        )}
+        {fileName && <div className={styles.fileName}>{fileName}</div>}
+        {previewUrl && (
+          <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+            <button
+              className={styles.button}
+              style={{ background: '#f44336', color: '#fff' }}
+              onClick={() => {
+                setPreviewUrl(null);
+                setFileName("");
+              }}
+            >
+              Discard / Retry
+            </button>
           </div>
         )}
       </div>

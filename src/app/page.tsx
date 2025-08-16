@@ -5,7 +5,7 @@ import MobileAccessForm from "../layout/AccessForm/Mobile/AccessForm";
 import TabletAccessForm from "../layout/AccessForm/Tablet/AccessForm";
 import DesktopAccessForm from "../layout/AccessForm/Desktop/AccessForm";
 
-export const AccessForm = () => {
+export default function AccessForm ()  {
   return (
     <>
       <div className="block sm:hidden">
@@ -23,4 +23,3 @@ export const AccessForm = () => {
   );
 };
 
-export default AccessForm;

@@ -6,6 +6,7 @@ import { DateOfBirthButton } from "../../../components/ui/DateOfBirthButton";
 import AccessFormStep2Mobile from "./AccessFormStep2";
 import CloudLogo from "../../../assets/images/cloudBG.png";
 import MainLogo from "../../../assets/images/accessFormLogo.png";
+import Image from "next/image";
 
 // Glass Buttons
 const BUTTON_LABELS = ["BIKE", "TREE", "CASTLE"];
@@ -39,12 +40,24 @@ export const MobileAccessForm: React.FC = () => {
     <div className={styles.screenWrapper}>
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <img src={CloudLogo.src} alt="Background Cloud" className={styles.cloudImage} />
+        <Image
+          src={CloudLogo.src}
+          alt="Background Cloud"
+          className={styles.cloudImage}
+          width={500}
+          height={500}
+        />
       </div>
 
       {/* Logo */}
       <div className={styles.logoWrapper}>
-        <img src={MainLogo.src} alt="Main Logo" className={styles.logoImage} />
+        <Image
+          src={MainLogo.src}
+          alt="Main Logo"
+          className={styles.logoImage}
+          width={120}
+          height={120}
+        />
       </div>
 
       {/* Glass Buttons Section */}

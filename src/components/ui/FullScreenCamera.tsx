@@ -27,7 +27,7 @@ export const FullScreenCamera = ({ onCapture, onClose }: { onCapture: (file: Fil
           videoRef.current.srcObject = stream;
         }
         setLoading(false);
-      } catch (err) {
+      } catch {
         setError("Unable to access camera. Please check permissions and try again.");
         setLoading(false);
       }

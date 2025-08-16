@@ -28,8 +28,6 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
     setShowModal(true);
   };
 
-  const closeModal = () => setShowModal(false);
-
   const handleOk = () => {
     onSave(tempDob); // Save to parent
     setShowModal(false);
@@ -64,3 +62,5 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
     </>
   );
 };
+
+
