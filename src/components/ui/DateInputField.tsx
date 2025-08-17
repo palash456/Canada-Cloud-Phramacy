@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 
@@ -30,20 +30,19 @@ export const DateInputField: React.FC<DateInputFieldProps> = ({
         type="date"
         max={maxDate}
         value={value}
+        placeholder="dd-mm-yyyy"
         onChange={handleChange}
         className="block w-full rounded-lg border-2 px-4 py-4 text-[18px] text-gray-900
-                   focus:border-[#6750A4] focus:ring-0 outline-none bg-transparent appearance-none 
+                   focus:ring-0 outline-none bg-transparent appearance-none 
                    [&::-webkit-calendar-picker-indicator]:hidden"
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
       <label
         htmlFor={id}
-        className={`absolute left-2.5 -top-2 px-2 font-medium pointer-events-none transition-colors ${
-          focused ? "bg-[#ECE6F0]" : "bg-[#F5F5F5]"
-        }`}
-        style={{ lineHeight: "1.2" }}
-      >
+        className={`absolute left-2.5 -top-2 px-2 font-medium pointer-events-none transition-colors bg-[#F5F5F5]`}
+        style={{ lineHeight: "1.0" }}
+        >
         {label}
       </label>
     </div>
