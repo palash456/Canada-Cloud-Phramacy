@@ -24,7 +24,7 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
 
   const openModal = () => {
     onClick?.();
-    setTempDob(dob); // Reset tempDob to current dob when opening
+    setTempDob(dob); // Reset Temporary Dob to current dob when opening
     setShowModal(true);
   };
 
@@ -34,7 +34,7 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
   };
 
   const handleCancel = () => {
-    setTempDob(dob); // Reset tempDob
+    setTempDob(dob); // Reset Temporary Dob
     setShowModal(false);
   };
 
