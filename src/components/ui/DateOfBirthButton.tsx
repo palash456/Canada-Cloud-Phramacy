@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import { dateOfBirth } from "@/assets/svg/dateOfBirth";
+import DateOfBirthIcon from "@/assets/svg/dateOfBirth"; // Adjust the import path as necessary
 import { ModalBox } from "./ModalBox";
 import { DateInputField } from "./DateInputField";
 
@@ -12,13 +12,19 @@ interface DateOfBirthButtonProps {
 }
 
 const buttonStyles = {
-  outer: "flex w-80 items-center justify-center rounded-full bg-gradient-to-r from-[#3070E7] to-[#16BDEB] p-[2px] font-['Roboto',sans-serif]",
-  inner: "flex w-full items-center justify-center rounded-full bg-white px-6 py-3.5 gap-2",
+  outer:
+    "flex w-80 items-center justify-center rounded-full bg-gradient-to-r from-[#3070E7] to-[#16BDEB] p-[2px] font-['Roboto',sans-serif]",
+  inner:
+    "flex w-full items-center justify-center rounded-full bg-white px-6 py-3.5 gap-2",
   label: "font-semibold text-[16px] text-[#096dd9] pt-[4px]",
   modalBody: "flex flex-col items-center gap-4 w-full",
 };
 
-export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSave, onClick }) => {
+export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({
+  dob,
+  onSave,
+  onClick,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [tempDob, setTempDob] = useState(dob);
 
@@ -43,7 +49,7 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
       {/* DOB Button */}
       <button className={buttonStyles.outer} onClick={openModal}>
         <div className={buttonStyles.inner}>
-          <span dangerouslySetInnerHTML={{ __html: dateOfBirth({ fill: "#096DD9" }) }} />
+          <DateOfBirthIcon fill="#096DD9" />
           <span className={buttonStyles.label}>Date of Birth</span>
         </div>
       </button>
@@ -52,8 +58,12 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
       {showModal && (
         <ModalBox
           title="Enter Birthday"
-          CloseButton={<span dangerouslySetInnerHTML={{ __html: dateOfBirth({ fill: "#000000" }) }} />}
-          body={<div className={buttonStyles.modalBody}><DateInputField value={tempDob} onChange={setTempDob} /></div>}
+          CloseButton={<DateOfBirthIcon fill="#000000" />}
+          body={
+            <div className={buttonStyles.modalBody}>
+              <DateInputField value={tempDob} onChange={setTempDob} />
+            </div>
+          }
           primaryAction={{ label: "OK", onClick: handleOk }}
           secondaryAction={{ label: "Cancel", onClick: handleCancel }}
           onClose={handleCancel}
@@ -62,5 +72,3 @@ export const DateOfBirthButton: React.FC<DateOfBirthButtonProps> = ({ dob, onSav
     </>
   );
 };
-
-
