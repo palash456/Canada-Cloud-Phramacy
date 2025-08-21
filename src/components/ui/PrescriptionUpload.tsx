@@ -1,217 +1,124 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
-import Header from "../common/Header";
-import Footer from "../common/Footer";
-import Button from "../ui/Button";
-import GuideBanner from "../ui/GuideBanner";
-import Camera from "@/assets/svg/Camera";
-import Upload from "@/assets/svg/Upload";
+import React, { useRef, useState } from "react";
+import Header from "../common/Header"; 
+import Footer, { Tab } from "../common/Footer"; 
+import Button from "../ui/Button"; 
+import GuideBanner from "../ui/GuideBanner"; 
+import Camera from "@/assets/svg/Camera"; 
+import Upload from "@/assets/svg/Upload"; 
+import Select from "@/assets/svg/Select";
+import File from "@/assets/svg/File";
+import User from "@/assets/svg/User";
 
-// Props accepted by this component
+// Define allowed tab IDs to ensure type safety
+type TabId = "select" | "user" | "file";
+
+// Props for this component
 interface PrescriptionUploadProps {
-  onSubmit?: (file: File) => void;
+  onSubmit?: (file: File) => void; // Optional callback for when a file is submitted
 }
 
-// Structure to hold file info
-interface FileData {
-  url: string | null;
-  name: string;
-  file: File | null;
+// Encapsulates the logic for opening a hidden file input
+function useFilePicker() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const openFilePicker = () => {
+    fileInputRef.current?.click(); // Programmatically open file picker
+  };
+
+  return { fileInputRef, openFilePicker };
 }
 
-// Tailwind classes grouped together
-const styles = {
-  wrapper:
-    "min-h-screen w-full flex flex-col items-center justify-start bg-[#E6F7FF] font-[Roboto,sans-serif] pt-[120px]",
-container: "w-[90%] h-[63vh] flex flex-col items-center justify-between",
-
-  fileName: "mt-2 text-sm text-gray-700",
-  previewContainer: "mt-4",
-};
+// Predefined tabs for the footer navigation
+const footerTabs: Tab[] = [
+  { id: "select", label: "Select", icon: <Select fill="#002766" /> },
+  { id: "user", label: "User", icon: <User fill="#002766" /> },
+  { id: "file", label: "File", icon: <File fill="#002766" /> },
+];
+// Main Component
 
 function PrescriptionUpload({ onSubmit }: PrescriptionUploadProps) {
-  const filePickerRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-
-  const [fileData, setFileData] = useState<FileData>({
-    url: null,
-    name: "",
-    file: null,
-  });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleFileSelect = (file: File) => {
-    const objectUrl = file.type.startsWith("image/")
-      ? URL.createObjectURL(file)
-      : null;
-
-    setFileData({
-      name: file.name,
-      url: objectUrl,
-      file,
-    });
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFileSelect(file);
-  };
-
-  const discardFile = () => {
-    if (fileData.url) URL.revokeObjectURL(fileData.url);
-    setFileData({ name: "", url: null, file: null });
-  };
-
-  const handleSubmit = async () => {
-    if (!fileData.file) return;
-
-    setIsSubmitting(true);
-
-    try {
-      onSubmit?.(fileData.file);
-
-      const formData = new FormData();
-      formData.append("prescription", fileData.file);
-
-      await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-    } catch (error) {
-      console.error("Upload failed:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      if (fileData.url) URL.revokeObjectURL(fileData.url);
-    };
-  }, [fileData.url]);
-
-  const hasFile = Boolean(fileData.file);
+  // Initialize file pickers for camera and file selection
+  const cameraPicker = useFilePicker();
+  const filePicker = useFilePicker();
+  const [activeTab, setActiveTab] = useState<TabId>("select");
 
   return (
-    <>
+    <div className="flex flex-col h-screen justify-between">
+      {/* Header section */}
       <Header />
 
-      <div className={styles.wrapper}>
-        <div className={styles.container}>
-          <div className="topSection w-full flex flex-col gap-8">
-            <div className="guideBanner">
-              <GuideBanner size="md" fullWidth>
-                Please scan or select ID
-              </GuideBanner>
-            </div>
+      {/* Main content area */}
+      <main className="flex-1 flex flex-col items-center justify-between px-5 pt-12 pb-4">
+        {/* Instruction banner */}
+        <section className="flex-1 w-full flex flex-col gap-8">
+          <GuideBanner size="md" fullWidth>
+            Please scan or select ID
+          </GuideBanner>
 
-            <div className="actionButtons">
-              {/* --- When NO file is selected --- */}
-              {!hasFile && (
-                <div className="flex justify-center gap-4">
-                  {/* Scan (Camera) */}
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    icon={<Camera fill="#096DD9" />}
-                    onClick={() => cameraInputRef.current?.click()}
-                  >
-                    Scan
-                  </Button>
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    icon={<Upload fill="#096DD9" />}
-                    onClick={() => filePickerRef.current?.click()}
-                  >
-                    Select
-                  </Button>
-
-                  <input
-                    ref={cameraInputRef}
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    className="hidden"
-                    onChange={handleInputChange}
-                  />
-
-                  {/* Select from files */}
-                  {/* <Button
-                size="lg"
-                icon={<Upload fill="#096DD9" />}
-                onClick={() => filePickerRef.current?.click()}
-              >
-                Select
-              </Button> */}
-
-                  <input
-                    ref={filePickerRef}
-                    type="file"
-                    accept="image/*,application/pdf"
-                    className="hidden"
-                    onChange={handleInputChange}
-                  />
-                </div>
-              )}
-
-              {/* --- When a file IS selected --- */}
-              {hasFile && (
-                <>
-                  <div className={styles.previewContainer}>
-                    {fileData.url ? (
-                      <Image
-                        src={fileData.url}
-                        alt="Prescription Preview"
-                        width={300}
-                        height={300}
-                        className="object-contain"
-                      />
-                    ) : (
-                      <div className="text-gray-500 text-sm">
-                        PDF file selected: {fileData.name}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className={styles.fileName}>{fileData.name}</div>
-
-                  <Button
-                    size="md"
-                    onClick={discardFile}
-                    disabled={isSubmitting}
-                  >
-                    Discard / Retry
-                  </Button>
-
-                  <Button
-                    size="md"
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="bottomSection">
+          {/* Buttons to trigger camera or file selection */}
+          <div className="flex justify-center gap-4">
+            {/* Scan button triggers camera input */}
             <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => cameraInputRef.current?.click()}
+              variant="primary"
+              size="lg"
+              icon={<Camera fill="#096DD9" />}
+              onClick={cameraPicker.openFilePicker}
             >
-              I don’t have ID
+              Scan
             </Button>
-          </div>
-        </div>
-      </div>
 
-      <Footer />
-    </>
+            {/* Select button triggers file input */}
+            <Button
+              variant="primary"
+              size="lg"
+              icon={<Upload fill="#096DD9" />}
+              onClick={filePicker.openFilePicker}
+            >
+              Select
+            </Button>
+
+            {/* Hidden input for camera capture */}
+            <input
+              ref={cameraPicker.fileInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+            />
+
+            {/* Hidden input for file selection */}
+            <input
+              ref={filePicker.fileInputRef}
+              type="file"
+              accept="image/*,application/pdf"
+              className="hidden"
+            />
+          </div>
+        </section>
+
+        {/* I don’t have ID" button */}
+        <section className="w-full flex justify-center">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={cameraPicker.openFilePicker} // Reuses camera picker for simplicity
+          >
+            I don’t have ID
+          </Button>
+        </section>
+      </main>
+
+      {/* Footer section with tab navigation */}
+      <footer className="h-[80px]">
+        <Footer
+          tabs={footerTabs} // Array of tab objects
+          activeTabId={activeTab} // Currently active tab
+          onTabClick={(tabId: string) => setActiveTab(tabId as TabId)} // Updates active tab
+        />
+      </footer>
+    </div>
   );
 }
 

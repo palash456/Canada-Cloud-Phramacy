@@ -29,7 +29,7 @@ const BANNER_SIZES: Record<BannerSize, { padding: string; text: string }> = {
 } as const;
 
 // Constants
-const BASE_OUTER_CLASSES = "inline-block rounded-[16px] p-[2px] transition-all duration-200";
+const BASE_OUTER_CLASSES = "inline-block rounded-[16px] p-[1.8px] transition-all duration-200";
 const OUTER_GRADIENT = "bg-gradient-to-r from-[#3070E7] via-[#16BDEB] via-[#16BDEB] via-[#16BDEB] via-[#16BDEB] via-[#16BDEB] via-[#FF007F] to-[#FF9000]";
 
 

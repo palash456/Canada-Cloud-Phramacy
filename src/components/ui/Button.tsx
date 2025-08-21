@@ -22,7 +22,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 // Configuration objects for better maintainability
 const BUTTON_SIZES: Record<ButtonSize, { padding: string; text: string; iconSize: number }> = {
   sm: { 
-    padding: "px-[60px] py-[6px]", 
+    padding: "px-[44px] py-[7px]", 
     text: "text-[12px]", 
     iconSize: 16
   },
@@ -44,8 +44,8 @@ const BUTTON_VARIANTS: Record<ButtonVariant, { inner: string; outer: string }> =
     inner: "bg-white text-[#3070E7] hover:bg-gray-50 active:bg-gray-100"
   },
   secondary: {
-    outer: "bg-[#ffffff80]",
-    inner: "bg-[#F2F2F2] text-[#000000] hover:bg-gray-50 active:bg-gray-100"
+    outer: "bg-[#ffffff]",
+    inner: "bg-[#F2F2F270] text-[#000000] hover:bg-gray-50 active:bg-gray-100 tracking-wide"
   },
   tertiary: {
     outer: "bg-[#096DD9]",
